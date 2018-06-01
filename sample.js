@@ -5,8 +5,6 @@
     const table = $('#parameterTable');
     const tableBody = table.children('tbody');
 
-    // This is the entry point into the extension.  It initializes the Tableau Extensions Api, and then
-    // grabs all of the parameters in the workbook, processing each one individually.
     tableau.extensions.initializeAsync().then(function () {
       tableau.extensions.dashboardContent.dashboard.getParametersAsync().then(function (parameters) {
         parameters.forEach(function (p) {
@@ -27,12 +25,6 @@
     });
   });
 
-  // When the parameter is changed, we recreate the row with the updated values.  This keeps the code
-  // clean, and emulates the approach that something like React does where it "rerenders" the UI with
-  // the updated data.
-  //
-  // To avoid multiple layout processing in the browser, we build the new row unattached to the DOM,
-  // and then attach it at the very end.  This helps avoid jank.
   function onParameterChange (parameterChangeEvent) {
     parameterChangeEvent.getParameterAsync().then(function (param) {
       const newRow = parameterRow(param);
@@ -59,8 +51,6 @@
     return cellElement;
   }
 
-  // The allowable values column has a complex structure, so to make things easier/cleaner,
-  // this function creates the subtree for the value of the allowable values column.
   function allowableValues (value) {
     function termKey (key) {
       return $('<dt>').attr('id', key).text(key);
